@@ -2,7 +2,7 @@
 	"schemaVersion": "0.1.0",
 	"name": "🩳 TikTok video",
 	"behavior": "create",
-	"noteContentFormat": "{% set desc = selector:#media-card-0 [data-e2e=\"video-desc\"]|replace:\"#\":\"\\\\\\\\#\" %}{% if desc %}# {{desc}}{% endif %}",
+	"noteContentFormat": "{# SOURCE: https://github.com/churnish/web-clipper-templates #}{# Lines holding only tags print nothing. In regexes, \\x22 is a double quote. #}{% set name = meta:property:og:title|replace:\"/ on TikTok.*$/s\":\"\"|escape_md %}\n{# Caption HTML: <br> marks line breaks; mentions and hashtags are links. #}{% set caption = selectorHtml:#media-card-0 [data-e2e=\"video-desc\"]|first|replace:\"/<br[^>]*>/g\":\"\\n\"|replace:\"/<a [^>]*?href=\\x22(\\/[^\\x22]*)\\x22[^>]*>(.*?)<\\/a>/gs\":\"[$2](https://www.tiktok.com$1)\"|replace:\"/<[^>]*>/g\":\"\"|replace:\"/&nbsp;/g\":\" \"|replace:\"/&lt;/g\":\"<\"|replace:\"/&gt;/g\":\">\"|replace:\"/&amp;/g\":\"&\"|replace:\"/[\\u200B\\u2060-\\u2064\\uFEFF]/g\":\"\"|replace:\"#\":\"\\\\\\\\#\"|replace:\"/ +$/gm\":\"\"|trim|replace:\"/^./s\":\":** $&\"|replace:\"/^$/\":\"**\" %}\n{% set cover = selector:#media-card-0 picture img?src|first %}\n**🩳 {{name}}{{caption}}\n\n{% if cover %}![|392]({{cover}}){% endif %}",
 	"properties": [
 		{
 			"name": "created",
@@ -16,17 +16,17 @@
 		},
 		{
 			"name": "author",
-			"value": "{{selector:#media-card-0 a[href^=\\\"/@\\\"]}}",
+			"value": "{{url|replace:\\\"/^[^@]*@([^\\/?#]+).*$/\\\":\\\"$1\\\"}}",
 			"type": "multitext"
-		},
-		{
-			"name": "cover",
-			"value": "{{selector:#media-card-0 picture img?src}}",
-			"type": "text"
 		},
 		{
 			"name": "favicon",
 			"value": "{{favicon}}",
+			"type": "multitext"
+		},
+		{
+			"name": "pfp",
+			"value": "{{selector:script#__UNIVERSAL_DATA_FOR_REHYDRATION__|replace:\\\"/^.*?avatarLarger\\x22:\\x22([^\\x22]+).*$/s\\\":\\\"¶$1\\\"|replace:\\\"/^[^¶].*$/s\\\":\\\"\\\"|replace:\\\"¶\\\":\\\"\\\"|replace:\\\"/\\x5Cu002F/g\\\":\\\"/\\\"}}",
 			"type": "multitext"
 		},
 		{
