@@ -1,0 +1,48 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "📢 🩳 Instagram post/reel",
+	"behavior": "create",
+	"noteContentFormat": "# {{meta:property:og:url|split:\"/\"|slice:4,5|first|replace:\"/^reel$/\":\"¤\"|replace:\"/^[^¤]*$/\":\"📢\"|replace:\"¤\":\"🩳\"}} {{meta:property:og:url|split:\"/\"|slice:3,4}}{{meta:name:description|replace:\"/^[^!-#]*$/\":\"\"|replace:\"/^.*?[0-9][0-9][0-9][0-9]. ./s\":\"\"|replace:\"/.[.] *$/s\":\"\"|replace:\"/@([A-Za-z0-9_.]*[A-Za-z0-9_])/g\":\"[@$1](https://www.instagram.com/$1/)\"|replace:\"/#([0-9A-Za-z_À-ɏЀ-ӿ]+)/g\":\"[\\\\\\\\#$1](https://www.instagram.com/explore/tags/$1/)\"|replace:\"/ +$/gm\":\"\"|trim|replace:\"/^./s\":\": $&\"}}\n{{selector:script[type$=json]|replace:'/^(.*?[^_]candidates.*?[^[-^])\".*$/s':'$1'|replace:\"/^(?:(?!candidates).)*carousel_media[^a-z0-9_,]*[[]/s\":\"¤\"|replace:\"/^[^¤].*$/s\":\"\"|replace:\"/^¤.*?media_type[^0-9]+2[^0-9].*$/s\":\"¶\"|replace:\"/^[^¶].*$/s\":\"\"|replace:\"¶\":\"\\n**Has video**\\n\"}}{{selector:script[type$=json]|replace:'/^(.*?[^_]candidates.*?[^[-^])\".*$/s':'$1'|replace:\"/[^_]candidates[^a-z]+url[^a-z]+([^!-#]+)/g\":\"¶$1¶\"|replace:\"/[[-^]/g\":\"\"|replace:\"u0025\":\"%\"|split:\"¶\"|nth:2n|unique|image|join:\"¶\"|replace:\"/^!..([^¶]*)$/s\":\"![|392]$1\"|replace:\"/([^¶]+¶[^¶]+)¶/g\":\"$1¶¶\"|replace:\"¶\":\"\\n\"|replace:\"/^./s\":\"\\n$&\"}}",
+	"properties": [
+		{
+			"name": "created",
+			"value": "{{date|date:YYYY-MM-DDTHH:mm:ssZ}}",
+			"type": "date"
+		},
+		{
+			"name": "tags",
+			"value": "{{meta:property:og:url|split:\\\"/\\\"|slice:4,5|first|replace:\\\"/^reel$/\\\":\\\"¤\\\"|replace:\\\"/^[^¤]*$/\\\":\\\"posts\\\"|replace:\\\"¤\\\":\\\"videos/short\\\"}}",
+			"type": "multitext"
+		},
+		{
+			"name": "author",
+			"value": "{{meta:property:og:url|split:\\\"/\\\"|slice:3,4}}",
+			"type": "multitext"
+		},
+		{
+			"name": "favicon",
+			"value": "{{favicon}}",
+			"type": "multitext"
+		},
+		{
+			"name": "pfp",
+			"value": "{{selector:main img[alt$=\\\"profile picture\\\"]?src|first}}",
+			"type": "multitext"
+		},
+		{
+			"name": "published",
+			"value": "{{selector:script[type$=json]|replace:\\\"/^.*?taken_at[^0-9]+/s\\\":\\\"\\\"|replace:\\\"/[^0-9].*$/s\\\":\\\"\\\"|date:(\\\"YYYY-MM-DD[T]HH:mm:ssZ\\\", \\\"X\\\")}}",
+			"type": "date"
+		},
+		{
+			"name": "url",
+			"value": "https://www.instagram.com/{{meta:property:og:url|split:\\\"/\\\"|slice:4,5|first|replace:\\\"/^reel$/\\\":\\\"reels\\\"}}/{{meta:property:og:url|split:\\\"/\\\"|slice:5,6|first}}/",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"/^https:\\/\\/www\\.instagram\\.com\\/(([^\\/]+\\/)?(p|reel)|reels)\\/[^\\/]/"
+	],
+	"noteNameFormat": "Untitled",
+	"path": "Clippings"
+}
