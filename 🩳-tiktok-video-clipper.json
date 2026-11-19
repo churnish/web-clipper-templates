@@ -1,0 +1,48 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "🩳 TikTok video",
+	"behavior": "create",
+	"noteContentFormat": "{% set desc = selector:#media-card-0 [data-e2e=\"video-desc\"]|replace:\"#\":\"\\\\\\\\#\" %}{% if desc %}# {{desc}}{% endif %}",
+	"properties": [
+		{
+			"name": "created",
+			"value": "{{date|date:YYYY-MM-DDTHH:mm:ssZ}}",
+			"type": "date"
+		},
+		{
+			"name": "tags",
+			"value": "videos/short",
+			"type": "multitext"
+		},
+		{
+			"name": "author",
+			"value": "{{selector:#media-card-0 a[href^=\\\"/@\\\"]}}",
+			"type": "multitext"
+		},
+		{
+			"name": "cover",
+			"value": "{{selector:#media-card-0 picture img?src}}",
+			"type": "text"
+		},
+		{
+			"name": "favicon",
+			"value": "{{favicon}}",
+			"type": "multitext"
+		},
+		{
+			"name": "published",
+			"value": "{{selector:script#__UNIVERSAL_DATA_FOR_REHYDRATION__|replace:\\\"/^.*?itemStruct.*?createTime.:./s\\\":\\\"\\\"|replace:\\\"/[^0-9].*$/s\\\":\\\"\\\"|date:(\\\"YYYY-MM-DD[T]HH:mm:ssZ\\\", \\\"X\\\")}}",
+			"type": "date"
+		},
+		{
+			"name": "url",
+			"value": "{{url|replace:\\\"/[?#].*$/\\\":\\\"\\\"}}",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"/^https:\\/\\/www\\.tiktok\\.com\\/@[^\\/]+\\/video\\//"
+	],
+	"noteNameFormat": "Untitled",
+	"path": "Clippings"
+}
