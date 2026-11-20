@@ -7,11 +7,11 @@
 		{
 			"name": "created",
 			"value": "{{date|date:YYYY-MM-DDTHH:mm:ssZ}}",
-			"type": "date"
+			"type": "datetime"
 		},
 		{
 			"name": "tags",
-			"value": "{% if meta:property:og:url contains \\\"/reel/\\\" %}videos/short{% else %}posts{% endif %}",
+			"value": "clippings, {% if meta:property:og:url contains \\\"/reel/\\\" %}videos/short{% else %}posts{% endif %}",
 			"type": "multitext"
 		},
 		{
@@ -21,7 +21,7 @@
 		},
 		{
 			"name": "favicon",
-			"value": "{{favicon}}",
+			"value": "Utility/Attachments/rzWiSjZRxk5.webp",
 			"type": "multitext"
 		},
 		{
@@ -44,5 +44,5 @@
 		"/^https:\\/\\/www\\.instagram\\.com\\/(([^\\/]+\\/)?(p|reel)|reels)\\/[^\\/]/"
 	],
 	"noteNameFormat": "Untitled",
-	"path": "Clippings"
+	"path": "Inbox"
 }

@@ -1,0 +1,58 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "📢 Telegram post",
+	"behavior": "create",
+	"noteContentFormat": "{# SOURCE: https://github.com/churnish/web-clipper-templates #}{# Telegram post opened with ?embed=1. Lines holding only tags print nothing, and each tag swallows the next line break. In regexes, \\x22 is a double quote; plain-text replacements need \\\" instead. #}{% set fwd = selector:.tgme_widget_message_forwarded_from_name %}\n{% set reply = selector:.tgme_widget_message_reply %}\n{# Post text is the last text block; a quoted reply has its own. Emoji come wrapped in <b>, so unwrap them, and drop formatting that holds only spaces or line breaks, or bold never closes on its own line. Placeholders carry line breaks, underline, spoilers and text-only # outside code (escaped so it is not a tag; code keeps a plain #) through the markdown filter. Spoilers need the editor-inline-spoilers.css snippet: https://github.com/churnish/obsidian-css-snippets/blob/main/editor-inline-spoilers.css #}{% set text = selectorHtml:.tgme_widget_message_text.js-message_text|last|replace:(\"/(?:<tg-emoji[^>]*>)?<i class=\\x22emoji\\x22[^>]*><b>(.*?)<\\/b><\\/i>(?:<\\/tg-emoji>)?/g\":\"$1\",\"/#(?![^<]*>)(?!(?:[^<]|<br\\s*\\/?>)*<\\/(?:code|pre)>)/g\":\"XHASHX\",\"/<(b|i|s|u|code)>((?:\\s|<br\\s*\\/?>)*)<\\/\\1>/g\":\"$2\",\"/<\\/(b|i|s|u)>(\\s*)<\\1>/g\":\"$2\",\"/<b>((?:[\\p{Extended_Pictographic}\\p{Emoji_Modifier}\\u{1F1E6}-\\u{1F1FF}\\u{FE0F}\\u{200D}]|\\s)+)<\\/b>/gu\":\"$1\",\"<u>\":\"XUNDERXSTARTX\",\"</u>\":\"XUNDERXENDX\",\"<tg-spoiler><span class=\\\"tg-spoiler-text\\\"><span class=\\\"d-text\\\">\":\"XSPOILERXSTARTX\",\"</span></span></tg-spoiler>\":\"XSPOILERXENDX\",\"/<br( \\/|\\/)?>/g\":\"XNEWXLINEX\",\"/<pre>(?!<code)([\\s\\S]*?)<\\/pre>/g\":\"<pre><code>$1</code></pre>\")|strip_tags:(\"a,b,i,s,u,code,pre,blockquote\")|markdown|replace:(\"XNEWXLINEX\":\"\\n\",\"XUNDERXSTARTX\":\"<u>\",\"XUNDERXENDX\":\"</u>\",\"XSPOILERXSTARTX\":\"<span class=\\\"spoiler\\\" tabindex=\\\"0\\\">\",\"XSPOILERXENDX\":\"</span>\",\"XHASHX\":\"\\\\\\\\#\",\"/!\\[[^\\]]*\\]\\([^)]*\\)/g\":\"\")|replace:(\"/ +$/gm\":\"\",\"/\\n{3,}/g\":\"\\n\\n\")|trim %}\n{% set preview = selector:.tgme_widget_message_link_preview[href^=\"https://t.me/\"]?href %}\n{# The video notice and the image grid carry their own leading blank line, so they need no tag around them. #}{% set video = selector:.tgme_widget_message_video_player?href|first|replace:\"/^.+$/s\":\"\\n\\n**Has video**\" %}\n{# Photo links sit in each photo's background-image style. #}{% set images = selector:.tgme_widget_message_photo_wrap?style|join:\"¶\"|replace:\"/[^¶]*?url\\(.([^'\\x22)]+)[^¶]*/g\":\"$1\"|split:\"¶\"|compact|image|join:\"\\n\"|replace:\"/^!\\[\\]([^\\n]*)$/\":\"![|392]$1\"|replace:\"/(.+\\n.+)\\n/g\":\"$1\\n\\n\"|replace:\"/^(.)/s\":\"\\n\\n$1\" %}\n**📢 {{selector:.tgme_widget_message_owner_name|escape_md}}:** {% if fwd %}Forwarded from [{{fwd}}]({{selector:.tgme_widget_message_forwarded_from_name?href}})\n\n***\n\n{% endif %}{% if reply %}quoting [{{reply|replace:\"/^([^\\n]+)\\n\\n?(.{0,65}).*/s\":\"$2…\"}}]({{selector:.tgme_widget_message_reply?href}}) by **{{reply|replace:\"/^([^\\n]+)\\n.*/s\":\"$1\"}}**\n\n***\n\n{% endif %}{{text}}{% if preview %}\n\n***\n\nQuoting [{{selector:.tgme_widget_message_link_preview[href^=\"https://t.me/\"] .link_preview_description|replace:\"/^(.{65}).*/s\":\"$1…\"}}]({{preview}}) by **{{selector:.tgme_widget_message_link_preview[href^=\"https://t.me/\"] .link_preview_title}}**{% endif %}\n{{video}}{{images}}",
+	"properties": [
+		{
+			"name": "created",
+			"value": "{{date|date:YYYY-MM-DDTHH:mm:ssZ}}",
+			"type": "datetime"
+		},
+		{
+			"name": "tags",
+			"value": "clippings, posts",
+			"type": "multitext"
+		},
+		{
+			"name": "author",
+			"value": "{% set author = selector:.tgme_widget_message_from_author %}{% if author %}[[{{author}}|​{{author}}]]{% else %}-{% endif %}",
+			"type": "multitext"
+		},
+		{
+			"name": "channel",
+			"value": "[[{{selector:.tgme_widget_message_owner_name|replace:\\\",\\\":\\\"&#44;\\\"}}|{{selector:.tgme_widget_message_owner_name|replace:\\\",\\\":\\\"&#44;\\\"}}]]",
+			"type": "multitext"
+		},
+		{
+			"name": "favicon",
+			"value": "Utility/Attachments/website_icon.svg",
+			"type": "multitext"
+		},
+		{
+			"name": "pfp",
+			"value": "{{selector:.tgme_widget_message_user_photo img?src}}",
+			"type": "multitext"
+		},
+		{
+			"name": "published",
+			"value": "{{selector:.tgme_widget_message_date time?datetime|date:\\\"YYYY-MM-DDTHH:mm:ssZ\\\"}}",
+			"type": "date"
+		},
+		{
+			"name": "uri",
+			"value": "{{selector:.tgme_widget_message_date?href|replace:\\\"/https:\\/\\/t\\.me\\/([^\\/]+)\\/([0-9]+)/\\\":\\\"tg://resolve?domain=$1&post=$2\\\"}}",
+			"type": "multitext"
+		},
+		{
+			"name": "url",
+			"value": "{{selector:.tgme_widget_message_link a?href}}",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"/^https:\\/\\/(www\\.)?t\\.me\\/[^/]+\\/\\d+\\?embed=\\d+$/"
+	],
+	"noteNameFormat": "Untitled",
+	"path": "Inbox"
+}

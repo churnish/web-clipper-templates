@@ -7,11 +7,11 @@
 		{
 			"name": "created",
 			"value": "{{date|date:YYYY-MM-DDTHH:mm:ssZ}}",
-			"type": "date"
+			"type": "datetime"
 		},
 		{
 			"name": "tags",
-			"value": "videos/short",
+			"value": "clippings, videos/short",
 			"type": "multitext"
 		},
 		{
@@ -21,7 +21,7 @@
 		},
 		{
 			"name": "favicon",
-			"value": "{{favicon}}",
+			"value": "Utility/Attachments/favicon 1.png",
 			"type": "multitext"
 		},
 		{
@@ -44,5 +44,5 @@
 		"/^https:\\/\\/www\\.tiktok\\.com\\/@[^\\/]+\\/video\\//"
 	],
 	"noteNameFormat": "Untitled",
-	"path": "Clippings"
+	"path": "Inbox"
 }
